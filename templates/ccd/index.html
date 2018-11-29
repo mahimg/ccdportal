@@ -1,0 +1,60 @@
+{% extends 'ccd/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+    {% load staticfiles %}
+
+    <div class="container">
+        <div class="row">
+            <form name="updateStateMain" action="{% url 'ccd:search'%}" method="post" role="form" enctype="multipart/form-data" style="width: 100%;">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" name="search" placeholder="Search Name and Roll Number" aria-label="Search Name and Roll Number" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                  </div>
+                </div>
+            </form>
+        </div>
+        {% if updates.count > 0 %}
+        <div class="row"><h6>Recent Updates:</h6></div>
+            {% for update in updates %}
+                <div class="row">
+                    <b>{{ update.addedOn|date:'d-F-Y | P'}}</b>
+                </div>
+                <div class="row" style="padding-left: 20px; color: red;">
+                    {{ update.description }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row" style="padding-top: 30px;"><h6>Recent Student Updates:</h6></div>
+        <div class="row text-center"><i>Click on row to view student details</i></div>
+        <div class="row table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Roll Number</th>
+                    <th scope="col">Last State</th>
+                    <th scope="col">Last Updated</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for student in allStudents %}
+                    <tr data-href="{% url 'ccd:studentDetails' rollNo=student.rollNo %}">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.rollNo }}</td>
+                        <td>{{ student.lastState }}</td>
+                        <td>{{ student.lastUpdated|date:'P d.M' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

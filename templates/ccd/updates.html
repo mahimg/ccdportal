@@ -1,0 +1,19 @@
+{% extends 'ccd/base.html' %}
+
+{% block title %}Details{% endblock %}
+
+{% block body %}
+
+    {% load staticfiles %}
+
+    <div class="container">
+        {% for update in updates %}
+            <div class="row">
+                <b>{{ update.addedOn|date:'d-F-Y | P'}}</b>
+            </div>
+            <div class="row" style="padding-left: 20px">
+                {{ update.description }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

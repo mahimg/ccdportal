@@ -1,0 +1,96 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title" content="CCD"/>
+    <meta property="og:type" content="website"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{% endblock %} | CCD</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Montserrat|Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<!-- Navbar -->
+<div class="">
+    <nav class="navbar navbar-expand-lg navbar-light ccd-navbar">
+        <div class="container">
+            <div class="justify-content-center">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    <b><i class="fas fa-bars" style=""></i></b>
+                </button>
+                <a class="navbar-brand d-lg-none" href="{% url 'ccd:index' %}">  Placement 2018</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <ul class="navbar-nav mr-auto">
+                        <a class="navbar-brand d-none d-lg-block align-items-start" href="{% url 'ccd:index' %}">Placement Portal</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ccd:index' %}">Dashboard <span
+                                    class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ccd:updates' %}">Updates <span
+                                    class="sr-only">(current)</span></a>
+                        </li>
+                        {% if user.is_authenticated  %}
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Hi, {{ user.username }}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'ccd:logout' %}">
+                                        <i class="fas fa-power-off"></i> Logout
+                                    </a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'ccd:login' %}">Login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+    {% block body %} {% endblock %}
+</div>
+
+<!--  Footer  -->
+<footer id="myFooter">
+    <div class="container">
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12  col-md-10 order-md-1 order-2">
+                        <p>© 2018 Centre for Career Development</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block script %}{% endblock %}
+
+</body>
+
+</html>

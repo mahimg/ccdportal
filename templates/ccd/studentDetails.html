@@ -1,0 +1,97 @@
+{% extends 'ccd/base.html' %}
+
+{% block title %}Details{% endblock %}
+
+{% block body %}
+
+    {% load staticfiles %}
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="row">
+                    <h6>Student Details</h6>
+                </div>
+                <div class="row">
+                    <b>Name:    </b> {{ student.name }}
+                </div>
+                <div class="row">
+                    <b>Roll Number: </b> {{ student.rollNo }}
+                </div>
+                <div class="row">
+                    <b>Last State: </b> {{ student.lastState }}
+                </div>
+                <div class="row">
+                    <b>Last Updated: </b> {{ student.lastUpdated }}
+                </div>
+                <div class="row">
+                    <b>Comments: </b> {{ student.comments }}
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-12" style="padding-top: 20px;">
+                <div class="row">
+                    <h6>Update State</h6>
+                </div>
+                {% if messages %}
+                        {% for message in messages %}
+                            <div class="{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                {% endif %}
+                <form name="updateStateMain" action="{% url 'ccd:updateStateMain'%}" method="post" role="form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <input class="form-control" type="text" id="rollNo" name="rollNo" value="{{ student.rollNo }}" hidden>
+                            <label for="">Enter/Exit a interview</label>
+                            <textarea class="form-control form-control-lg" type="text" name="description" id="description" value="" autocomplete="off" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+
+                <form name="updateStateMain" action="{% url 'ccd:updateRequestState'%}" method="post" role="form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <input class="form-control" type="text" id="rollNo" name="rollNo" value="{{ student.rollNo }}" hidden>
+                            <label for="">Requested for a interview</label>
+                            <textarea class="form-control form-control-lg" type="text" name="description" id="description" value="" autocomplete="off" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <button type="submit" class="btn btn-primary">Request</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Updated On</th>
+                    <th scope="col">Updated By</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for state in studentStates %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ state.description }}</td>
+                        <td>{{ state.updatedOn }}</td>
+                        <td>{{ state.updatedBy }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

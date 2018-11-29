@@ -1,0 +1,36 @@
+{% extends 'ccd/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+    {% load staticfiles %}
+
+    <div class="container">
+        <div class="row">
+            Upload Student Data:
+        <form action="{% url 'ccd:uploadModelFile' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="studentCsv">
+            <input type="submit" value="Upload">
+        </form>
+
+        </div>
+
+        <div class="row">
+            Upload Login details:
+            <form action="{% url 'ccd:uploadModelFile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="pocLogin">
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+        <div class="row">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
