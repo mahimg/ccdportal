@@ -9,6 +9,7 @@ class Student(models.Model):
     rollNo = models.CharField(primary_key=True, max_length=20)
     lastState = models.CharField(max_length=200)
     lastUpdated = models.DateTimeField()
+    phoneNumber = models.CharField(max_length=50)
     comments = models.CharField(max_length=2000)
 
 

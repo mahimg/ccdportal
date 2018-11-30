@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^logout/$', views.logoutUser, name='logout'),
     url(r'^changepassword/$', views.changepassword, name='changepassword'),
     url(r'^uploadModelFile/$', views.uploadModelFile, name='uploadModelFile'),
+    url(r'^contact/$', views.contact, name='contact'),
 ]

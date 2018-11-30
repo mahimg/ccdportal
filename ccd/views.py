@@ -229,6 +229,7 @@ def uploadModelFile(request):
         return render(request, 'ccd/uploadData.html')
 
 
+
 @login_required(login_url='ccd:login')
 def changepassword(request):
     if request.method == "POST":
