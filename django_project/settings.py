@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ccd',
-        'USER': 'ccd2018',
-        'PASSWORD': 'ccd2018abc',
+        'NAME': 'django',
+        'USER': 'django',
+        'PASSWORD': 'cac0e9b6abd37e6a46eeb9a41159b073',
         'HOST': 'localhost',
-        'PORT': '5433',
+        'PORT': '5432',
     }
 }
 
