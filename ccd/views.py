@@ -15,7 +15,7 @@ from django.utils.timezone import utc
 def index(request):
     if request.user.is_authenticated():
         context = {}
-        allStudents = Student.objects.all().order_by('-lastUpdated')
+        allStudents = Student.objects.all().order_by('-lastUpdated')[:100]
         context['allStudents'] = allStudents
         updates = Update.objects.all().order_by('-addedOn')[:2]
         context['updates'] = updates
@@ -228,3 +228,20 @@ def uploadModelFile(request):
             messages.success(request, str(companyAdded) + ' company added!')
         return render(request, 'ccd/uploadData.html')
 
+
+@login_required(login_url='ccd:login')
+def changepassword(request):
+    if request.method == "POST":
+        try:
+            print(request.user)
+            user1 = User.objects.get(username=request.user)
+            user1.set_password(request.POST.get('password'))
+            user1.save()
+            messages.success(request, 'Password reset successfully. Login with your new Password')
+            return render(request, 'ccd/changepassword.html')
+        except Exception as e:
+            print(e)
+            messages.error(request, 'Error. Contact Admin')
+            return render(request, 'ccd/changepassword.html')
+    else:
+        return render(request, 'ccd/changepassword.html')

@@ -47,10 +47,14 @@
                                     Hi, {{ user.username }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'ccd:changepassword' %}">
+                                        <i class="fas fa-power-off"></i> Change Password
+                                    </a>
                                     <a class="dropdown-item" href="{% url 'ccd:logout' %}">
                                         <i class="fas fa-power-off"></i> Logout
                                     </a>
                                 </div>
+
                             </li>
                         {% endif %}
                         {% if not user.is_authenticated %}

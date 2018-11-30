@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^uploadData/$', views.uploadData, name='uploadData'),
     url(r'^login/$', views.loginUser, name='login'),
     url(r'^logout/$', views.logoutUser, name='logout'),
+    url(r'^changepassword/$', views.changepassword, name='changepassword'),
     url(r'^uploadModelFile/$', views.uploadModelFile, name='uploadModelFile'),
 ]
