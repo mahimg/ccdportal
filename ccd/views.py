@@ -38,7 +38,7 @@ def loginUser(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(request.POST['next'], 'store:index')
+                return HttpResponseRedirect(request.POST['next'], 'ccd:index')
             else:
                 return render(request, 'ccd/login.html', {'login_error_message': 'User Inactive. Contact Admin!'})
         else:
