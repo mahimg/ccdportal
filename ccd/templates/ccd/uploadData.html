@@ -26,6 +26,14 @@
             </form>
         </div>
         <div class="row">
+            Upload Company details:
+            <form action="{% url 'ccd:uploadModelFile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="companyCsv">
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+        <div class="row">
             {% if messages %}
                 {% for message in messages %}
                     <div class="{{ message.tags }}">{{ message }}</div>

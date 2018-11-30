@@ -55,14 +55,41 @@ def studentDetails(request, rollNo):
     context = {}
     student = get_object_or_404(Student, rollNo=rollNo)
     context['student'] = student
-    studentStates = State.objects.filter(student=student).order_by('-updatedOn')
+    studentStates = State.objects.filter(student=student).order_by('-updatedOn').order_by('company')
+    previousState = ""
+    if studentStates.count() > 0:
+        previousState = studentStates[0].company
+    currentList = []
+    allStates = []
+    for state in studentStates:
+        if state.company == previousState:
+            currentList = [state] + currentList
+        else:
+            currentList = sorted(currentList, key=lambda x: x.updatedOn, reverse=True)
+            allStates.append({ 'company': previousState, 'states': currentList})
+            previousState = state.company
+            currentList = []
+            currentList = [state] + currentList
+    currentList = sorted(currentList, key=lambda x: x.updatedOn, reverse=True)
+    allStates.append({'company': previousState, 'states': currentList})
+
+    context['allStates'] = allStates
     context['studentStates'] = studentStates
+    company = Company.objects.all().order_by('name')
+    context['company'] = company
+    try:
+        pref = RememberPreference.objects.get(user=request.user)
+        context['pref'] = pref
+    except Exception:
+        pass
     return render(request, 'ccd/studentDetails.html', context)
+
 
 def updateState(student, state, updateCurrentState):
     if state['description'] == '':
         return False
-    newState = State(student=student, description=state['description'], updatedBy=state['updatedBy'])
+    company = Company.objects.get(name=state['company'])
+    newState = State(student=student, description=state['description'], updatedBy=state['updatedBy'], company=company)
     newState.save()
     if updateCurrentState == True:
         student.lastState = newState.description
@@ -72,10 +99,18 @@ def updateState(student, state, updateCurrentState):
 
 @login_required(login_url='ccd:login')
 def updateStateMain(request):
+    if request.POST.get('companyPreference'):
+        # try:
+        obj, created = RememberPreference.objects.get_or_create(user=request.user,
+                                                        defaults={'companyPreference': Company.objects.get(name=request.POST.get('companyName'))})
+        if not created:
+            obj.companyPreference = Company.objects.get(name=request.POST.get('companyName'))
+            obj.save()
     student = get_object_or_404(Student, rollNo=request.POST['rollNo'])
     state = {
         'description' : request.POST['description'],
         'updatedBy': request.user,
+        'company': request.POST.get('companyName'),
     }
     if updateState(student, state, True):
         messages.success(request, 'Successfully Updated!')
@@ -107,6 +142,7 @@ def updateRequestState(request):
     state = {
         'description': request.POST['description'],
         'updatedBy': request.user,
+        'company': request.POST.get('companyName'),
     }
     if updateState(student, state, False):
         messages.success(request, 'Successfully Updated!')
@@ -173,7 +209,22 @@ def uploadModelFile(request):
                 row[0] = username
                 writer.writerow(row)
                 pocLoginAdded = pocLoginAdded + 1
-            messages.success(request, str(pocLoginAdded) + ' login added!')
             return response
+        companyCsv = request.FILES.get("companyCsv")
+        if companyCsv:
+            companyAdded = 0
+            reader = csv.reader(codecs.iterdecode(companyCsv, 'utf-8'))
+            print(reader)
+            for row in reader:
+                obj, created = Company.objects.update_or_create(
+                    name=row[0],
+                    defaults={
+                        'description': row[0],
+                    },
+
+                )
+                companyAdded = companyAdded + 1
+
+            messages.success(request, str(companyAdded) + ' company added!')
         return render(request, 'ccd/uploadData.html')
 

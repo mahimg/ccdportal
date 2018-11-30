@@ -38,8 +38,21 @@
                             <div class="{{ message.tags }}">{{ message }}</div>
                         {% endfor %}
                 {% endif %}
+
                 <form name="updateStateMain" action="{% url 'ccd:updateStateMain'%}" method="post" role="form" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Company</label>
+                  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="companyName" required>
+                    <option value="" disabled>Choose...</option>
+                      {% for comp in company %}
+                        <option value="{{ comp.pk }}" {% if comp.name == pref.companyPreference.name %}selected{% endif %}>{{ comp.name }}</option>
+                      {% endfor %}
+                  </select>
+
+                  <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="companyPreference" name="companyPreference">
+                    <label class="custom-control-label" for="companyPreference">Remember my preference</label>
+                  </div>
                     <div class="form-row">
                         <div class="form-group col-12">
                             <input class="form-control" type="text" id="rollNo" name="rollNo" value="{{ student.rollNo }}" hidden>
@@ -56,6 +69,18 @@
 
                 <form name="updateStateMain" action="{% url 'ccd:updateRequestState'%}" method="post" role="form" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref1">Company</label>
+                  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref1" name="companyName" required>
+                    <option value="" disabled>Choose...</option>
+                      {% for comp in company %}
+                        <option value="{{ comp.pk }}" {% if comp.name == pref.companyPreference.name %}selected{% endif %}>{{ comp.name }}</option>
+                      {% endfor %}
+                  </select>
+
+                  <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="companyPreference" name="companyPreference">
+                    <label class="custom-control-label" for="companyPreference">Remember my preference</label>
+                  </div>
                     <div class="form-row">
                         <div class="form-group col-12">
                             <input class="form-control" type="text" id="rollNo" name="rollNo" value="{{ student.rollNo }}" hidden>
@@ -71,27 +96,32 @@
                 </form>
             </div>
         </div>
-        <div class="row">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">State</th>
-                    <th scope="col">Updated On</th>
-                    <th scope="col">Updated By</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for state in studentStates %}
+        {% for states in allStates %}
+            <div class="row">
+            <h4>{{ states.company.name }}</h4>
+            </div>
+            <div class="row">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ state.description }}</td>
-                        <td>{{ state.updatedOn }}</td>
-                        <td>{{ state.updatedBy }}</td>
+                        <th scope="col">#</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Updated On</th>
+                        <th scope="col">Updated By</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                    {% for state in states.states %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ state.description }}</td>
+                            <td>{{ state.updatedOn }}</td>
+                            <td>{{ state.updatedBy }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
